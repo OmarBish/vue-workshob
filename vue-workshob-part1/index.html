@@ -1,77 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Vue Part 1</title>
     <!-- bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
+
 <body class="p-4">
-    
+
     <div id="app">
         <div class="container text-center">
             <h2>Add post</h2>
             <div class="row">
                 <div class="col">
-                    <input type="text" v-model="title" class="form-control" placeholder="title" >
+                    <input type="text" v-model="title" class="form-control" placeholder="title">
                 </div>
                 <div class="col">
-                    <input type="text" v-model="text" class="form-control" placeHolder="text" >
+                    <input type="text" v-model="text" class="form-control" placeHolder="text">
 
                 </div>
             </div>
-            <button  class="btn btn-primary"  @click="handleButton" :disabled="title.length == 0 || text.length == 0">add</button>
+            <button class="btn btn-primary" @click="handleButton"
+                :disabled="title.length == 0 || text.length == 0">add</button>
+                <button class="btn btn-primary" @click="getData"
+                :disabled="title.length == 0 || text.length == 0">get data from server</button>
         </div>
         <div class="row">
-            <div class="col" v-for="(card, index) in cards" :key="index" >
-                <div class="card" style="width: 18rem;">
-                    <!-- <img src="..." class="card-img-top" alt="..."> -->
-                    <div class="card-body">
-                      <h5 class="card-title">{{card.title}}</h5>
-                      <p class="card-text">{{card.text}}</p>
-                      <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                    </div>
-                  </div>
+            <div class="col" v-for="(card, index) in cards" :key="index">
+                <card :title='card.title' :text='card.text' :index="index" img='https://picsum.photos/300/300'
+                    @delete='deleteCard' :index="index">
+
+
+                </card>
             </div>
-            
+
+
         </div>
     </div>
-    
-    
-    
+
+
+
     <!-- bootstap -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+    <!-- Vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
-    
+    <!-- Vue Components -->
+    <script src="./card.js"></script>
+
+
     <script>
-        
+
         new Vue({
-            el:"#app",
-            data:{
-                title:"sample title",
-                text:"sample text",
-                cards:[]
+            el: "#app",
+            data: {
+                title: "sample title",
+                text: "sample text",
+                cards: []
             },
-            methods:{
-                handleButton(){
+            methods: {
+                handleButton() {
                     let item = {
-                        title:this.title,
-                        text:this.text
+                        title: this.title,
+                        text: this.text
                     }
                     this.cards.push(item)
+                    axios.post('https://jsonplaceholder.typicode.com/posts')
+                },
+                deleteCard(index) {
+                    this.cards.splice(index, 1)
+                },
+                getData(){
                 }
-            }
+                
+            },
+            created() {
+                let self = this
+                axios.get('https://jsonplaceholder.typicode.com/posts')
+                    .then(function (res) {
+                        res.data.forEach(function (element) {
+                            let item = {
+                                title: element.title,
+                                text: element.body
+                            }
+                            self.cards.push(item)
+
+                        })
+                    })
+                }
+            
         })
     </script>
 
 </body>
+
 </html>
