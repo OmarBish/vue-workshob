@@ -15,26 +15,27 @@
             <h2>Add post</h2>
             <div class="row">
                 <div class="col">
-                    <input type="text" v-model="name" class="form-control" placeholder="title" >
+                    <input type="text" v-model="title" class="form-control" placeholder="title" >
                 </div>
                 <div class="col">
-                    <input type="text" v-model="name" class="form-control" placeHolder="text" >
+                    <input type="text" v-model="text" class="form-control" placeHolder="text" >
 
                 </div>
             </div>
-            <button  class="btn btn-primary"  @click="handleButton" :disabled="name.length == 0">add</button>
+            <button  class="btn btn-primary"  @click="handleButton" :disabled="title.length == 0 || text.length == 0">add</button>
         </div>
         <div class="row">
-            <div class="col">
+            <div class="col" v-for="(card, index) in cards" :key="index" >
                 <div class="card" style="width: 18rem;">
                     <!-- <img src="..." class="card-img-top" alt="..."> -->
                     <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      <h5 class="card-title">{{card.title}}</h5>
+                      <p class="card-text">{{card.text}}</p>
                       <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                     </div>
                   </div>
             </div>
+            
         </div>
     </div>
     
@@ -51,7 +52,26 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
     
-
+    <script>
+        
+        new Vue({
+            el:"#app",
+            data:{
+                title:"sample title",
+                text:"sample text",
+                cards:[]
+            },
+            methods:{
+                handleButton(){
+                    let item = {
+                        title:this.title,
+                        text:this.text
+                    }
+                    this.cards.push(item)
+                }
+            }
+        })
+    </script>
 
 </body>
 </html>
