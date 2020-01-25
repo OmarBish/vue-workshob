@@ -11,19 +11,34 @@
 <body class="p-4">
     
     <div id="app">
-        <p class="text-center" >This Text should change as we change the value in the field</p>
-        <h2 class="text-center" id="text">John Doe</h2>
-        <input type="text" value="John Doe" class="form-control" id="field">
+        <div class="container text-center">
+            <h2>Add post</h2>
+            <div class="row">
+                <div class="col">
+                    <input type="text" v-model="name" class="form-control" placeholder="title" >
+                </div>
+                <div class="col">
+                    <input type="text" v-model="name" class="form-control" placeHolder="text" >
+
+                </div>
+            </div>
+            <button  class="btn btn-primary"  @click="handleButton" :disabled="name.length == 0">add</button>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <!-- <img src="..." class="card-img-top" alt="..."> -->
+                    <div class="card-body">
+                      <h5 class="card-title">Card title</h5>
+                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                    </div>
+                  </div>
+            </div>
+        </div>
     </div>
     
-    <script>
-        let field = document.getElementById('field');
-        field.addEventListener('keyup',function(){
-            console.log(field.value)
-            let text = document.getElementById('text');
-            text.textContent =field.value
-        })
-    </script>
+    
     
     <!-- bootstap -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -33,6 +48,9 @@
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    
 
 
 </body>
